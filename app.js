@@ -98,7 +98,8 @@
     barra.classList.toggle('solida', !oscuro && !sobreFoto && introTop <= 60);
   }
   let pedido = false;
-  addEventListener('scroll', () => { if (!pedido) { pedido = true; requestAnimationFrame(() => { pedido = false; pintar(); }); } }, { passive: true });
+  let moverReels = () => {};
+  addEventListener('scroll', () => { if (!pedido) { pedido = true; requestAnimationFrame(() => { pedido = false; pintar(); moverReels(); }); } }, { passive: true });
   addEventListener('resize', () => { G = null; requestAnimationFrame(medir); });
   if (document.fonts && document.fonts.load) {
     Promise.all([document.fonts.load('300 100px "Cormorant Garamond"'), document.fonts.ready]).then(medir, medir);
@@ -204,6 +205,40 @@
     if (opener) opener.focus();
   });
   dlg.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') llenar(actual + 1); if (e.key === 'ArrowLeft') llenar(actual - 1); });
+
+  /* ---------- intro: la banda de reels se desliza mientras se baja ---------- */
+  const reelsSec = $('[data-reels]');
+  if (reelsSec) {
+    const vista = $('[data-reels-vista]', reelsSec), pista = $('[data-reels-pista]', reelsSec), cap = $('[data-reel-cap]', reelsSec);
+    const items = $$('.reel', pista);
+    let viaje = 0, centro = 0;
+    const medirReels = () => { viaje = Math.max(0, pista.scrollWidth - vista.clientWidth); };
+    moverReels = () => {
+      if (quieto.matches) return;
+      const r = vista.getBoundingClientRect(), vh = innerHeight;
+      if (r.bottom < -50 || r.top > vh + 50) return;
+      // de cuando la banda asoma por abajo a cuando sale por arriba
+      const p = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));
+      pista.style.transform = `translate3d(${(-p * viaje).toFixed(1)}px,0,0)`;
+      const cx = vista.clientWidth / 2;
+      let mejor = 0, d = Infinity;
+      const vw = vista.clientWidth;
+      items.forEach((it, k) => {
+        const b = it.getBoundingClientRect(); const dd = Math.abs(b.left + b.width / 2 - cx); if (dd < d) { d = dd; mejor = k; }
+        it.classList.toggle('fuera', b.right < -40 || b.left > vw + 40); // los que aún no asoman no se pintan
+      });
+      if (mejor !== centro || !items[mejor].classList.contains('al-centro')) {
+        centro = mejor;
+        items.forEach((it, k) => it.classList.toggle('al-centro', k === mejor));
+        if (cap.textContent !== items[mejor].dataset.cap) { cap.textContent = items[mejor].dataset.cap; cap.classList.remove('cambia'); void cap.offsetWidth; cap.classList.add('cambia'); }
+      }
+    };
+    if (!quieto.matches) vista.classList.add('vivos');
+    medirReels();
+    addEventListener('resize', () => { medirReels(); moverReels(); });
+    addEventListener('load', () => { medirReels(); moverReels(); });
+    moverReels();
+  }
 
   /* ---------- bodas recientes: el índice mueve la foto grande ---------- */
   const indice = $('[data-indice]');
