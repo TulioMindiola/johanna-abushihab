@@ -1,0 +1,384 @@
+/* Johanna Abushihab · J|A Weddings */
+:root {
+  --bg: #f3f2ef;
+  --surface: #e4e2dd;
+  --ink: #11100f;
+  --muted: #57534d;
+  --field: #0f0e0d;
+  --on-field: #f3f2ef;
+  --on-field-muted: #b7b0a5;
+  --m: clamp(16px, 2.2vw, 32px);
+  --g: clamp(12px, 1.5vw, 24px);
+  --serif: 'Cormorant Garamond', 'Cormorant', 'Times New Roman', serif;
+  --sans: 'Jost', 'Futura', system-ui, sans-serif;
+  --t-xl: clamp(56px, 8.4vw, 132px);
+  --t-row: clamp(34px, 4.4vw, 68px);
+  --t-l: clamp(28px, 2.6vw, 40px);
+  --t-st: clamp(23px, 2.1vw, 33px);
+  --t-b: 18px;
+  --t-s: 15px;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-io: cubic-bezier(.65, 0, .35, 1);
+  --sec: clamp(120px, 13vw, 200px);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: 72px; -webkit-tap-highlight-color: transparent; }
+a, button, select, input, label { touch-action: manipulation; }
+.boton, .paso-btn, .redondo, .boda-cerrar, .nav a { -webkit-user-select: none; user-select: none; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--t-b)/1.55 var(--sans); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: clip; }
+img, video { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+button, input, select { font: inherit; color: inherit; }
+::selection { background: var(--ink); color: var(--bg); }
+:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.saltar { position: absolute; left: var(--m); top: -60px; z-index: 100; background: var(--ink); color: var(--bg); padding: 12px 18px; text-decoration: none; }
+.saltar:focus { top: 12px; }
+h1, h2, h3, p { margin: 0; }
+.h2 { font: 400 var(--t-l)/1.05 var(--serif); letter-spacing: -0.015em; text-wrap: balance; }
+.enlace { background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .25em; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); transition: text-decoration-color .25s ease; }
+@media (hover: hover) and (pointer: fine) { .enlace:hover { text-decoration-color: currentColor; } }
+
+/* botones: rectángulo plano, una sola forma en toda la página */
+.boton { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; background: var(--ink); color: var(--bg); text-decoration: none; font: 500 var(--t-s)/1 var(--sans); letter-spacing: .01em; border: 0; cursor: pointer; transition: transform .16s var(--ease-out), background-color .25s ease, color .25s ease; }
+.boton:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) { .boton:hover { background: #2a2725; } }
+
+/* barra */
+.barra { position: fixed; inset: 0 0 auto 0; z-index: 50; display: flex; align-items: center; gap: 32px; padding: max(14px, env(safe-area-inset-top)) max(var(--m), env(safe-area-inset-right)) 14px max(var(--m), env(safe-area-inset-left)); color: var(--ink); transition: background-color .35s ease, color .35s ease, transform .5s var(--ease-out); }
+.barra.solida { background: var(--bg); }
+.barra.oscura { background: var(--field); color: var(--on-field); }
+.barra.sobre-foto { color: var(--on-field); }
+.barra.sobre-foto .boton-barra, .barra.oscura .boton-barra { background: var(--on-field); color: var(--ink); }
+.marca { display: inline-flex; align-items: baseline; gap: 10px; text-decoration: none; margin-right: auto; }
+.marca-ja { font: 400 var(--t-st)/1 var(--serif); letter-spacing: .02em; }
+.marca-w { font: 500 var(--t-s)/1 var(--sans); letter-spacing: .02em; }
+.nav { display: flex; gap: 28px; }
+.nav a { font: 400 var(--t-s)/1 var(--sans); text-decoration: none; padding: 14px 0; }
+@media (hover: hover) and (pointer: fine) { .nav a:hover { text-decoration: underline; text-underline-offset: .35em; } }
+.boton-barra { min-height: 44px; padding: 0 20px; }
+
+/* portada: J|A con la barra como ventana */
+.hero { position: relative; height: 270svh; }
+.hero-stage { position: sticky; top: 0; height: 100svh; overflow: clip; }
+.hero-foto { position: absolute; top: var(--it, 0px); right: var(--ir, 0px); bottom: var(--ib, 0px); left: var(--il, 0px); overflow: clip; background: var(--surface); }
+.hero-foto img { position: absolute; top: calc(-1 * var(--it, 0px)); left: calc(-1 * var(--il, 0px)); width: var(--sw, 100vw); max-width: none; height: var(--sh, 100svh); object-fit: cover; object-position: 50% 58%; transform: scale(var(--sc, 1.12)); transform-origin: 50% 58%; }
+.hero-foto::after { content: ""; position: absolute; inset: 0 0 auto 0; height: 120px; background: linear-gradient(rgb(0 0 0 / .38), rgb(0 0 0 / 0)); opacity: var(--scrim, 0); pointer-events: none; } /* taste-skill-ignore: velo neutro bajo el menú sobre la foto */
+.mono { position: absolute; inset: 0; pointer-events: none; font: 300 var(--em, 40vw)/1.25 var(--serif); }
+.mono-l { position: absolute; top: 0; left: 0; display: block; line-height: 1.25; overflow: clip; }
+.mono-l > span { display: block; }
+.mono-bar { position: absolute; }
+.hero-izq, .hero-der { position: absolute; bottom: var(--hb, 10svh); }
+.hero-izq { left: var(--m); }
+.hero-der { right: var(--m); width: min(30ch, 24vw); display: grid; gap: 22px; justify-items: start; }
+.hero h1 { font: 400 var(--t-l)/1.02 var(--serif); letter-spacing: -0.015em; }
+.lines .line { display: block; overflow: clip; padding-bottom: .1em; margin-bottom: -.1em; }
+.lines [data-line] { display: block; }
+.hero-sub { font-size: var(--t-b); line-height: 1.45; }
+.hero.abierta .hero-izq, .hero.abierta .hero-der { display: none; }
+.hero-pie { position: absolute; left: var(--m); bottom: 24px; color: var(--on-field); font-size: var(--t-s); opacity: var(--pie, 0); background: rgb(15 14 13 / .62); padding: 6px 10px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .lines [data-line] { transform: translateY(105%); animation: subir 1s var(--ease-out) forwards; animation-delay: calc(var(--i) * 110ms + 350ms); }
+  .js .mono-l > span { transform: translateY(102%); animation: subir 1.1s var(--ease-out) forwards; }
+  .js .mono-a > span { animation-delay: 110ms; }
+  .js .hero-der { opacity: 0; animation: aparecer .8s ease forwards .9s; }
+  .js .hero-foto { animation: abrir-barra 1.2s var(--ease-out) both .2s; }
+}
+@keyframes subir { to { transform: none; } }
+@keyframes aparecer { to { opacity: 1; } }
+@keyframes abrir-barra { from { clip-path: inset(0 0 100% 0); } }
+
+/* intro */
+.intro { margin-top: -100svh; min-height: 100svh; display: grid; align-content: start; grid-template-columns: repeat(12, 1fr); column-gap: var(--g); padding: 120px var(--m) var(--sec); position: relative; z-index: 2; background: var(--bg); }
+.intro-txt { grid-column: 7 / 13; grid-row: 1; display: grid; gap: 28px; }
+.statement { font: 400 var(--t-st)/1.25 var(--serif); text-indent: 3em; max-width: 30em; }
+.intro-foto { grid-column: 1 / 5; grid-row: 2; margin: -2.4em 0 0; }
+.intro-foto img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.intro-video { grid-column: 10 / 13; grid-row: 2; align-self: end; justify-self: end; width: 72%; margin: 0; }
+.intro-video video { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--surface); }
+.intro-nota { grid-column: 7 / 10; grid-row: 2; align-self: end; font-size: var(--t-b); line-height: 1.5; max-width: 26ch; }
+[data-fill] { --fill: var(--ink); color: var(--fill); }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .is-filling > span { display: inline-block; text-indent: 0; color: color-mix(in oklab, var(--fill) 45%, transparent); animation: ink-fill linear both; animation-timeline: view(); animation-range: cover 18% cover 42%; }
+  }
+}
+@keyframes ink-fill { to { color: var(--fill); } }
+
+/* four seasons: banda de paneles */
+.show { padding: 0 0 var(--sec); }
+.show-h { margin: 0 var(--m) 56px calc(var(--m) + 2 * (100% - 2 * var(--m)) / 12); }
+.banda { display: flex; height: 68svh; min-height: 420px; }
+.panel { position: relative; margin: 0; flex: 5 1 0; overflow: clip; transition: flex-grow .5s var(--ease-io); }
+.panel-2 { flex-grow: 2; } .panel-3 { flex-grow: 3; } .panel-4 { flex-grow: 2; background: var(--field); }
+.panel img, .panel video { width: 100%; height: 100%; object-fit: cover; }
+.panel-1 img { object-position: 50% 45%; }
+.panel-t { position: absolute; top: 24px; left: 24px; padding: 14px 18px 16px; display: grid; gap: 2px; color: var(--on-field); font: 400 var(--t-l)/1.1 var(--serif); background: var(--field); }
+@media (hover: hover) and (pointer: fine) { .banda:hover .panel:hover { flex-grow: 6; } }
+.show-pie { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--g); padding: 24px var(--m) 0; align-items: baseline; }
+.show-pie p { grid-column: 1 / 7; max-width: 58ch; }
+.show-pie .enlace { grid-column: 10 / 13; justify-self: end; font-size: var(--t-b); }
+
+/* bodas: los nombres como un párrafo */
+.obra { padding: 0 var(--m) var(--sec); }
+.nombres { list-style: none; margin: 0; padding: 0; font: 400 var(--t-row)/1.14 var(--serif); letter-spacing: -0.02em; color: var(--muted); }
+.nombres li { display: inline; }
+.nombres-h h2 { display: inline; font: inherit; color: var(--ink); }
+.nombre { text-decoration: none; color: inherit; transition: color .3s ease; cursor: pointer; white-space: nowrap; }
+.marco { display: inline-block; width: 1.2em; height: .78em; margin: 0 .08em 0 .22em; vertical-align: -.02em; overflow: clip; transform-origin: 0 70%; transition: transform .5s var(--ease-out); }
+.marco img { width: 100%; height: 100%; object-fit: cover; }
+@media (hover: hover) and (pointer: fine) { .nombre:hover { color: var(--ink); } .nombre:hover .marco { transform: scale(1.6); } }
+.nombre:focus-visible { color: var(--ink); }
+.obra-pie { margin-top: 40px; font-size: var(--t-s); max-width: 70ch; }
+
+/* cómo trabajamos: diagonal */
+.como { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--g); padding: 0 var(--m) var(--sec); align-items: start; }
+.paso { display: contents; }
+.como-h { grid-column: 8 / 13; grid-row: 1; }
+.paso-foto { margin: 0; }
+.paso-foto img { width: 100%; object-fit: cover; }
+.paso-txt { max-width: 36ch; font-size: var(--t-b); line-height: 1.55; }
+.paso-txt strong { font-weight: 500; }
+.paso-1 .paso-foto { grid-column: 1 / 5; grid-row: 1 / 3; }
+.paso-1 .paso-foto img { aspect-ratio: 3 / 4; }
+.paso-1 .paso-txt { grid-column: 5 / 8; grid-row: 1; padding-top: 4px; }
+.paso-2 .paso-foto { grid-column: 6 / 10; grid-row: 2; margin-top: 140px; }
+.paso-2 .paso-txt { grid-column: 10 / 13; grid-row: 2; margin-top: 140px; }
+.paso-3 .paso-foto { grid-column: 7 / 13; grid-row: 3; margin-top: 160px; }
+.paso-3 .paso-foto img { aspect-ratio: 16 / 10; }
+.paso-3 .paso-txt { grid-column: 3 / 6; grid-row: 3; margin-top: 160px; }
+.comparar { position: relative; aspect-ratio: 3 / 2; overflow: clip; background: var(--field); --x: 50%; }
+.comparar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cmp-real { object-position: 50% 35%; }
+.cmp-render { clip-path: inset(0 calc(100% - var(--x)) 0 0); }
+.cmp-ctrl { position: absolute; inset: 0; display: block; }
+.cmp-ctrl input { -webkit-appearance: none; appearance: none; width: 100%; height: 100%; margin: 0; background: transparent; cursor: ew-resize; }
+.cmp-ctrl input::-webkit-slider-runnable-track { height: 100%; background: transparent; }
+.cmp-ctrl input::-moz-range-track { height: 100%; background: transparent; }
+.cmp-ctrl input::-webkit-slider-thumb { -webkit-appearance: none; width: 48px; height: 48px; margin-top: 0; border-radius: 50%; background: var(--on-field) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M19 17l-7 7 7 7M29 17l7 7-7 7' fill='none' stroke='%2311100f' stroke-width='1.8'/%3E%3C/svg%3E") center / 48px no-repeat; transform: translateY(calc(50cqh - 24px)); }
+.cmp-ctrl input::-moz-range-thumb { width: 48px; height: 48px; border: 0; border-radius: 50%; background: var(--on-field) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M19 17l-7 7 7 7M29 17l7 7-7 7' fill='none' stroke='%2311100f' stroke-width='1.8'/%3E%3C/svg%3E") center / 48px no-repeat; }
+.comparar { container-type: size; }
+.cmp-ctrl input:focus-visible { outline: none; }
+.comparar:focus-within { outline: 2px solid var(--ink); outline-offset: 4px; }
+.cmp-et { position: absolute; bottom: 14px; padding: 6px 10px; font-size: var(--t-s); color: var(--on-field); background: rgb(15 14 13 / .62); pointer-events: none; }
+.cmp-et-r { left: 14px; } .cmp-et-p { right: 14px; }
+
+/* cartel: lo que planeamos */
+.cartel { background: var(--field); color: var(--on-field); padding: 88px var(--m) 80px; }
+.cartel-h { margin-bottom: 40px; color: var(--on-field); }
+.cartel-lista { list-style: none; margin: 0; padding: 0; }
+.cartel-lista a { display: flex; align-items: baseline; justify-content: space-between; gap: 32px; text-decoration: none; transition: opacity .35s ease; }
+.cartel-w { font: 300 var(--t-xl)/.96 var(--serif); letter-spacing: -0.035em; }
+.cartel-d { font-size: var(--t-b); color: var(--on-field-muted); text-align: right; max-width: 32ch; transition: color .3s ease; }
+@media (hover: hover) and (pointer: fine) {
+  .cartel-lista:hover a { opacity: .42; }
+  .cartel-lista a:hover { opacity: 1; }
+  .cartel-lista a:hover .cartel-d { color: var(--on-field); }
+}
+.cartel-lista a:focus-visible { outline-offset: 2px; }
+
+/* johanna */
+.johanna { padding: var(--sec) var(--m); }
+.jo-fila { display: grid; grid-template-columns: minmax(0, 34fr) minmax(0, 56fr) minmax(0, 10fr); column-gap: var(--g); }
+.jo-lado { grid-column: 1; display: grid; grid-template-columns: minmax(0, 220px) 1fr; gap: 24px; align-items: end; }
+.jo-foto { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; }
+.jo-datos { margin: 0; display: grid; gap: 18px; font-size: var(--t-s); }
+.jo-datos dt { color: var(--muted); }
+.jo-datos dd { margin: 0; }
+.jo-txt { grid-column: 2 / 4; display: grid; gap: 24px; align-content: end; }
+.jo-p { font: 400 var(--t-st)/1.3 var(--serif); max-width: 30em; }
+.jo-b { max-width: 62ch; }
+.jo-registro { margin-top: 120px; }
+.jo-palabra { grid-column: 1; font-size: var(--t-s); }
+.jo-listas { grid-column: 2 / 4; display: grid; grid-template-columns: repeat(2, minmax(0, 300px)); gap: 64px; }
+.jo-lista { list-style: none; margin: 0; padding: 0; display: grid; align-content: start; gap: 12px; font-size: var(--t-s); }
+.jo-lista li { display: flex; justify-content: space-between; gap: 16px; }
+.jo-lista li > span:last-child { color: var(--muted); }
+.jo-lista a { text-decoration: none; }
+@media (hover: hover) and (pointer: fine) { .jo-lista a:hover { text-decoration: underline; text-underline-offset: .3em; } }
+
+/* lugares */
+.lugares { background: var(--surface); }
+.lugares-banda { height: 34vh; min-height: 220px; display: flex; align-items: center; overflow: clip; }
+.lugares-pista { display: flex; align-items: center; white-space: nowrap; font: 300 var(--t-xl)/1 var(--serif); letter-spacing: -0.03em; width: max-content; }
+.lugar { padding: 0 .28em; }
+.punto { display: inline-block; width: .2em; height: .2em; border-radius: 50%; background: currentColor; }
+@media (prefers-reduced-motion: no-preference) { .lugares-pista { animation: correr 60s linear infinite; } }
+@keyframes correr { to { transform: translateX(-50%); } }
+.lugares-pie { background: var(--bg); padding: 20px var(--m) 0; font: 400 var(--t-b)/1.45 var(--sans); }
+
+/* cita: la boda en filas */
+.cita { padding: var(--sec) 0 0; }
+.cita-h { padding: 0 var(--m) 40px; }
+.filas { font: 400 var(--t-row)/1 var(--serif); letter-spacing: -0.015em; }
+.fila { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: .3em; row-gap: 8px; min-height: 2.15em; padding: .42em var(--m) .32em; }
+.fila:nth-child(odd) { background: var(--surface); }
+.campo { font: inherit; letter-spacing: inherit; color: inherit; background: transparent; border: 0; border-radius: 0; padding: 0 0 .04em; text-decoration: underline; text-decoration-thickness: .04em; text-underline-offset: .14em; cursor: pointer; }
+select.campo { -webkit-appearance: none; appearance: none; padding-right: .72em; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 7l6 6 6-6' fill='none' stroke='%2311100f' stroke-width='1.6'/%3E%3C/svg%3E") right .04em center / .42em no-repeat; }
+select.campo option { font: 400 18px var(--sans); }
+.fecha { position: relative; display: inline-block; }
+.fecha-ver { display: inline-block; }
+.fecha-in { position: absolute; left: 0; bottom: 0; width: 1px; height: 1px; opacity: 0; border: 0; padding: 0; font-size: 16px; pointer-events: none; } /* taste-skill-ignore: campo de fecha invisible, lo abre su etiqueta */
+.fecha:focus-within .fecha-ver { outline: 2px solid currentColor; outline-offset: 6px; }
+.invitados { display: inline-flex; align-items: baseline; gap: .18em; }
+.campo-num { width: 2.1em; text-align: center; -moz-appearance: textfield; cursor: text; }
+.campo-num::-webkit-outer-spin-button, .campo-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.paso-btn { width: 48px; height: 48px; align-self: center; border-radius: 50%; border: 0; background: var(--ink); color: var(--bg); font: 400 30px/1 var(--serif); cursor: pointer; transition: transform .16s var(--ease-out); }
+.paso-btn:active { transform: scale(.92); }
+.fila-dato { color: var(--ink); }
+.fila-chica { font: 400 var(--t-b)/1.5 var(--sans); letter-spacing: 0; min-height: 0; padding-top: 18px; padding-bottom: 18px; }
+.fila-hola { background: var(--field) !important; color: var(--on-field); align-items: center; gap: .4em; }
+.redondo { display: inline-grid; place-items: center; width: .95em; height: .95em; border-radius: 50%; background: var(--on-field); color: var(--ink); transition: transform .25s var(--ease-out); }
+.redondo svg { width: 46%; height: 46%; }
+.redondo:active { transform: scale(.94); }
+@media (hover: hover) and (pointer: fine) { .redondo:hover { transform: translateX(6px); } }
+.cita-alt { padding: 24px var(--m) 0; max-width: 70ch; }
+
+/* preguntas */
+.preguntas { padding: var(--sec) var(--m); display: grid; gap: 80px; }
+.pq { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--g); align-items: baseline; }
+.pq-q { grid-column: 1 / 7; font: 400 var(--t-l)/1.1 var(--serif); letter-spacing: -0.01em; max-width: 20em; text-wrap: balance; }
+.pq-h { color: var(--muted); }
+.pq-a { grid-column: 8 / 13; max-width: 42ch; }
+
+/* pie */
+.pie { background: var(--field); color: var(--on-field); padding: 72px var(--m) max(32px, env(safe-area-inset-bottom)); overflow: clip; }
+.pie-nombre { font: 300 calc((100vw - 2 * var(--m)) / 7.15)/.9 var(--serif); letter-spacing: -0.04em; white-space: nowrap; }
+.pie-fila { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--g); margin-top: 72px; }
+.pie-lugares { grid-column: 1 / 6; list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font: 400 var(--t-l)/1.25 var(--serif); }
+.pie-lugares a { text-decoration: none; }
+@media (hover: hover) and (pointer: fine) { .pie-lugares a:hover, .pie-cols a:hover, .pie-creditos a:hover { text-decoration: underline; text-underline-offset: .25em; } }
+.pie-cols { grid-column: 7 / 13; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--g); }
+.pie-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; align-content: start; font-size: var(--t-s); }
+.pie-cols a, .pie-creditos a { text-decoration: none; }
+.pie-creditos { margin-top: 72px; font-size: var(--t-s); color: var(--on-field-muted); max-width: 110ch; }
+.pie-legal { display: flex; justify-content: space-between; gap: 24px; margin-top: 40px; font-size: var(--t-s); color: var(--on-field-muted); }
+
+/* diálogo de cada boda */
+.boda { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: var(--field); color: var(--on-field); overflow: auto; overscroll-behavior: contain; }
+.boda::backdrop { background: var(--field); }
+.boda-in { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--g); padding: 0 var(--m); min-height: 100%; }
+.boda-lado { grid-column: 1 / 5; position: sticky; top: 0; align-self: start; height: 100svh; display: flex; flex-direction: column; gap: 18px; padding: 88px 0 32px; overflow: auto; }
+.boda-cerrar { position: fixed; top: 16px; right: var(--m); z-index: 3; min-height: 44px; padding: 0 20px; border: 0; background: var(--on-field); color: var(--ink); font: 500 var(--t-s)/1 var(--sans); cursor: pointer; }
+.boda-t { font: 400 var(--t-l)/1.05 var(--serif); letter-spacing: -0.015em; }
+.boda-lugar { font-size: var(--t-s); color: var(--on-field-muted); }
+.boda-frase { font: 400 var(--t-st)/1.28 var(--serif); }
+.boda-cred { margin: 8px 0 0; display: grid; grid-template-columns: auto 1fr; column-gap: 18px; row-gap: 6px; font-size: var(--t-s); }
+.boda-cred dt { color: var(--on-field-muted); }
+.boda-cred dd { margin: 0; overflow-wrap: anywhere; }
+.boda-cred a { text-decoration: none; }
+@media (hover: hover) and (pointer: fine) { .boda-cred a:hover { text-decoration: underline; } }
+.boda-nav { margin-top: auto; display: flex; gap: 28px; font-size: var(--t-s); }
+.boda-fotos { grid-column: 5 / 13; display: grid; grid-template-columns: 1fr 1fr; gap: var(--g); padding: 88px 0 var(--m) 24px; align-items: start; }
+.boda-fotos > * { margin: 0; }
+.boda-fotos img, .boda-fotos video { width: 100%; height: auto; background: #1c1a18; }
+.boda-fotos .ancha { grid-column: 1 / -1; }
+.boda-fotos .baja { margin-top: 18%; }
+@media (prefers-reduced-motion: no-preference) {
+  .boda[open] .boda-in { animation: aparecer .45s ease both; }
+  .boda[open] .boda-fotos > * { animation: subir-foto .9s var(--ease-out) both; animation-delay: calc(var(--k, 0) * 70ms + 120ms); }
+}
+@keyframes subir-foto { from { opacity: 0; transform: translateY(28px); } }
+html.con-boda { overflow: hidden; }
+
+/* entradas */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-rise] { opacity: .3; transform: translateY(26px); transition: opacity .8s ease, transform 1s var(--ease-out); transition-delay: calc(var(--d, 0) * 80ms); }
+  .js [data-rise].dentro { opacity: 1; transform: none; }
+}
+
+/* tableta */
+@media (max-width: 1024px) {
+  .jo-fila { grid-template-columns: 1fr; row-gap: 40px; }
+  .jo-lado, .jo-txt, .jo-palabra, .jo-listas { grid-column: 1; }
+  .jo-registro { margin-top: 72px; }
+}
+
+/* portada apilada (tableta vertical y teléfono) */
+@media (max-width: 900px), (max-aspect-ratio: 21/20) {
+  .hero-izq { top: calc(84px + 2svh); bottom: auto; }
+  .hero h1 { font-size: clamp(40px, 8.4vw, 76px); }
+  .hero-der { left: var(--m); right: var(--m); bottom: 28px; width: auto; max-width: 34ch; gap: 16px; justify-items: start; }
+}
+
+/* tableta: la diagonal se apila */
+@media (max-width: 1024px) {
+  .como { display: flex; flex-direction: column; gap: 0; }
+  .paso { display: block; margin-top: 56px; }
+  .como-h { margin-bottom: 8px; }
+  .paso-foto { margin-top: 0 !important; }
+  .paso-1 .paso-foto { width: min(100%, 560px); }
+  .paso-2 .paso-foto { width: 86%; margin-left: auto !important; }
+  .paso-3 .paso-foto { width: 86%; }
+  .paso-txt { margin-top: 18px !important; max-width: 52ch; }
+  .paso-2 .paso-txt { margin-left: 14%; }
+}
+@media (max-width: 900px) {
+  .intro { grid-template-columns: 34% 1fr; column-gap: 4%; }
+  .statement { text-indent: 0; }
+  .intro-txt { grid-column: 1 / -1; grid-row: 1; gap: 20px; }
+  .intro-foto { grid-column: 2; grid-row: 2; margin: 40px 0 0; }
+  .intro-foto img { aspect-ratio: 4 / 5; }
+  .intro-video { grid-column: 1; grid-row: 2; align-self: end; justify-self: stretch; width: 100%; }
+  .intro-nota { grid-column: 2; grid-row: 3; margin-top: 20px; max-width: none; }
+}
+
+/* teléfono */
+@media (max-width: 700px) {
+  :root { --sec: 104px; --t-xl: 14vw; --t-row: 8vw; --t-l: 26px; --t-st: 21px; --t-s: 15px; }
+  .barra { gap: 12px; padding-top: max(10px, env(safe-area-inset-top)); padding-bottom: 10px; }
+  .nav { display: none; }
+  .marca-ja { font-size: var(--t-l); }
+  .boton-barra { padding: 0 16px; min-height: 44px; }
+  .hero { height: 262svh; }
+  .hero h1 { font-size: var(--t-row); }
+  .hero-der { bottom: 24px; max-width: none; justify-items: stretch; }
+  .hero-der .boton { width: 100%; }
+  .show-h { margin: 0 var(--m) 32px; }
+  .banda { height: 84svh; flex-wrap: wrap; }
+  .panel { flex: none; height: 50%; }
+  .panel-1 { width: 64%; } .panel-2 { width: 36%; } .panel-3 { width: 36%; } .panel-4 { width: 64%; }
+  .panel-t { font-size: var(--t-st); top: 16px; left: 16px; }
+  .show-pie { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .show-pie p, .show-pie .enlace { grid-column: 1; justify-self: start; }
+  .nombres { line-height: 1.22; }
+  .nombres li:nth-child(n+5) .marco { display: none; }
+  .nombre { padding: 3px 0; }
+  .cartel { padding: 72px var(--m); }
+  .cartel-lista a { display: block; }
+  .cartel-lista li + li { margin-top: 18px; }
+  .cartel-d { display: block; text-align: left; font-size: var(--t-s); margin-top: 6px; }
+  .jo-lado { grid-template-columns: 44% 1fr; }
+  .jo-listas { grid-template-columns: 1fr; gap: 40px; }
+  .lugares-banda { height: 22vh; min-height: 150px; }
+  .fila { min-height: 0; padding: 14px var(--m) 12px; column-gap: .22em; }
+  .invitados { gap: .16em; }
+  .paso-btn { width: 44px; height: 44px; }
+  .fila-hola { justify-content: space-between; }
+  .redondo { width: 56px; height: 56px; }
+  .preguntas { gap: 56px; }
+  .pq { display: block; }
+  .pq-a { margin-top: 12px; }
+  .pie-nombre { font-size: calc((100vw - 2 * var(--m)) / 4.6); white-space: normal; line-height: .92; }
+  .pie-nombre span { display: block; }
+  .pie-fila { display: block; margin-top: 48px; }
+  .pie-cols { grid-template-columns: 1fr 1fr; margin-top: 40px; row-gap: 32px; }
+  .boda-in { display: block; padding: 0; }
+  .boda-lado { position: static; height: auto; padding: 72px var(--m) 24px; }
+  .boda-fotos { grid-template-columns: 1fr; padding: 0 var(--m) 32px; }
+  .boda-fotos .baja { margin-top: 0; }
+  .boda-nav { margin-top: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero { height: auto; }
+  .hero-stage { position: relative; }
+  .hero-foto { inset: 0 !important; }
+  .hero-foto img { inset: 0 !important; width: 100% !important; height: 100% !important; }
+  .mono { display: none; }
+  .hero-izq, .hero-der { color: var(--on-field); }
+  .hero-stage::after { content: ""; position: absolute; inset: auto 0 0 0; height: 55%; background: linear-gradient(rgb(0 0 0 / 0), rgb(0 0 0 / .55)); } /* taste-skill-ignore: velo neutro bajo el texto sobre la foto */
+  .hero-izq, .hero-der, .hero-pie { z-index: 2; }
+  .hero-der .boton { background: var(--on-field); color: var(--ink); }
+  .hero-foto img { transform: none; }
+}
