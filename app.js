@@ -88,12 +88,13 @@
   const oscuros = $$('[data-oscuro]');
   function tonoBarra(p) {
     const enHero = hero.getBoundingClientRect().bottom > 60;
-    let oscuro = false;
-    for (const s of oscuros) { const r = s.getBoundingClientRect(); if (r.top < 40 && r.bottom > 40) { oscuro = true; break; } }
+    let oscuro = false, jardin = false;
+    for (const s of oscuros) { const r = s.getBoundingClientRect(); if (r.top < 40 && r.bottom > 40) { oscuro = true; jardin = s.dataset.oscuro === 'jardin'; break; } }
     const introTop = $('.intro').getBoundingClientRect().top;
     const sobreFoto = enHero && p > 0.5 && introTop > 60;
     barra.classList.toggle('sobre-foto', sobreFoto && !oscuro);
-    barra.classList.toggle('oscura', oscuro);
+    barra.classList.toggle('oscura', oscuro && !jardin);
+    barra.classList.toggle('jardin', jardin);
     barra.classList.toggle('solida', !oscuro && !sobreFoto && introTop <= 60);
   }
   let pedido = false;
@@ -244,6 +245,34 @@
       new IntersectionObserver((es) => { visto = es[0].isIntersecting; if (visto && !reloj) reloj = setInterval(avanzar, 2800); if (!visto && reloj) { clearInterval(reloj); reloj = null; } }, { threshold: 0.3 }).observe(indice);
     }
     precargar(1);
+  }
+
+  /* ---------- preguntas: una abierta a la vez, con la foto de su boda ---------- */
+  const pq = $('[data-pq]');
+  if (pq) {
+    const its = $$('[data-pq-item]', pq);
+    let [pf, pk] = $$('[data-pimg]', pq), pturno = 0;
+    pk.sizes = pf.sizes;
+    pf.dataset.c = its[0].dataset.foto;
+    function fotoDe(it) {
+      const c = it.dataset.foto;
+      $('[data-pcap]', pq).textContent = it.dataset.cap;
+      if (pf.dataset.c === c) return;
+      const t = ++pturno;
+      pk.srcset = `assets/f/${c}-640.webp 640w, assets/f/${c}-1280.webp 1280w`; pk.src = `assets/f/${c}-640.webp`; pk.dataset.c = c;
+      const go = () => { if (t !== pturno) return; pk.alt = it.dataset.alt; pk.classList.add('activa'); pf.classList.remove('activa'); pf.alt = ''; [pf, pk] = [pk, pf]; };
+      if (pk.complete && pk.naturalWidth) go(); else pk.addEventListener('load', go, { once: true });
+    }
+    its.forEach((it) => {
+      const b = $('.pq-b', it);
+      b.addEventListener('click', () => {
+        const estaba = it.classList.contains('abierta');
+        its.forEach((o) => { const on = o === it && !estaba; o.classList.toggle('abierta', on); $('.pq-b', o).setAttribute('aria-expanded', String(on)); });
+        if (!estaba) fotoDe(it);
+      });
+      // al acercarse a una pregunta su foto ya viene en camino
+      b.addEventListener('pointerenter', () => { const im = new Image(); im.sizes = pf.sizes; im.srcset = `assets/f/${it.dataset.foto}-640.webp 640w, assets/f/${it.dataset.foto}-1280.webp 1280w`; im.src = `assets/f/${it.dataset.foto}-640.webp`; }, { once: true });
+    });
   }
 
   /* ---------- solicita una cita: la boda en una línea ---------- */
